@@ -35,11 +35,10 @@ public class RefreshToken {
 		this.expiredDate = expiredDate;
 	}
 	
-	public RefreshToken update(String keyValue, LocalDateTime expiredDate) {
+	public void update(String keyValue, LocalDateTime expiredDate) {
 		this.keyValue = keyValue;
 		this.expiredDate = expiredDate;
 		this.modifiedDate = LocalDateTime.now();
-		return this;
 	}
 	
 	
