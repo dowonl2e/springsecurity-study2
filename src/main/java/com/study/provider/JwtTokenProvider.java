@@ -57,19 +57,19 @@ public class JwtTokenProvider {
 				.map(GrantedAuthority::getAuthority)
 				.collect(Collectors.joining(","));
 		
-		long now = (new Date()).getTime();
-		
+		Date now = new Date();
 		//AccessToken 생성
-		Date accessTokenExpiresIn = new Date(now + ACCESS_TOKEN_EXPIRE_TIME);
+		Date accessTokenExpiresIn = new Date(now.getTime() + ACCESS_TOKEN_EXPIRE_TIME);
 		String accessToken = Jwts.builder()
 				.setSubject(authentication.getName()) 		// payload "sub": "name"
+				.setIssuedAt(now)
 				.claim(AUTHORITIES_KEY, authorities)		// payload "Auth": "ROLE_USER"
 				.setExpiration(accessTokenExpiresIn)		// payload "exp": 1516239022 (예시)
 				.signWith(key, SignatureAlgorithm.HS512)	// header "alg": "HS512"
 				.compact();
 		
 		
-		Date refreshTokenExpiredIn = new Date(now + REFRESH_TOKEN_EXPIRE_TIME);
+		Date refreshTokenExpiredIn = new Date(now.getTime() + REFRESH_TOKEN_EXPIRE_TIME);
 		String refreshToken = Jwts.builder()
 				.setExpiration(refreshTokenExpiredIn)
 				.signWith(key, SignatureAlgorithm.HS512)
@@ -79,8 +79,8 @@ public class JwtTokenProvider {
 				.grantType(BEARER_TYPE)
 				.accessToken(accessToken)
 				.accessTokenExpioresIn(accessTokenExpiresIn.getTime())
-				.refreshExpiredDate(refreshTokenExpiredIn.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime())
 				.refreshToken(refreshToken)
+				.refreshExpiredDate(refreshTokenExpiredIn.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime())
 				.build();
 	}
 	
@@ -115,7 +115,7 @@ public class JwtTokenProvider {
 	 * @param token
 	 * @return
 	 */
-	public boolean validateToken(String token) {
+	public boolean isValidToken(String token) {
 		
 		try {
 			Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
