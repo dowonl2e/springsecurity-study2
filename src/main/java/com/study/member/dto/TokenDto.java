@@ -9,7 +9,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
-@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -20,4 +19,27 @@ public class TokenDto {
 	private String refreshToken;
 	private Long accessTokenExpioresIn;
 	private LocalDateTime refreshExpiredDate;
+	
+	public TokenDto setGrantType(String grantType) {
+		this.grantType = grantType;
+		return this;
+	}
+	public TokenDto setAccessToken(String accessToken) {
+		this.accessToken = accessToken;
+		return this;
+	}
+	public TokenDto setRefreshToken(String refreshToken) {
+		this.refreshToken = refreshToken;
+		return this;
+	}
+	public TokenDto setAccessTokenExpioresIn(Long accessTokenExpioresIn) {
+		this.accessTokenExpioresIn = accessTokenExpioresIn;
+		return this;
+	}
+	public TokenDto setRefreshExpiredDate(LocalDateTime refreshExpiredDate) {
+		this.refreshExpiredDate = refreshExpiredDate;
+		return this;
+	}
+	
+	
 }
