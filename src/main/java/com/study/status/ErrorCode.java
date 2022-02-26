@@ -37,15 +37,16 @@ public enum ErrorCode {
 	USER_INVALID(HttpStatus.BAD_REQUEST, "404010", "일치하는 회원 정보가 없습니다."),
 	USER_MISMATCH_EMAIL(HttpStatus.BAD_REQUEST, "404031", "일치하는 이메일 정보가 없습니다."),
 	USER_MISMATCH_PWD(HttpStatus.BAD_REQUEST, "404032", "비밀번호가 틀렸습니다."),
+	USER_LOGOUT(HttpStatus.BAD_REQUEST, "404010", "로그아웃 되었습니다."),
 	
 	//토큰
 	INVALID_AUTH_TOKEN(HttpStatus.BAD_REQUEST, "404018", "권한 정보가 없는 토큰입니다."),
 	UNSUPPORTED_AUTH_TOKEN(HttpStatus.BAD_REQUEST, "404058", "지원되지 않는 토큰입니다."),
 	INVALID_REFRESH_TOKEN(HttpStatus.BAD_REQUEST, "404019", "유효하지 않는 리프레시 토큰입니다."),
-	MISMATCH_REFRESH_TOKEN(HttpStatus.BAD_REQUEST, "404039", "리프레시 토큰의 유저 정보가 일치하지 않습니다."),
+	MISMATCH_REFRESH_TOKEN(HttpStatus.BAD_REQUEST, "404039", "토큰의 유저 정보가 일치하지 않습니다."),
 	EXPIRED_AUTH_TOKEN(HttpStatus.BAD_REQUEST , "404048", "만료된 토큰입니다."),
 	NOT_EXIST_AUTH_TOKEN(HttpStatus.BAD_REQUEST, "404078", "토큰 정보가 없습니다."),
-	WRONG_AUTH_TOKEN(HttpStatus.BAD_REQUEST, "404088", "토큰 정보가 없습니다.");
+	WRONG_AUTH_TOKEN(HttpStatus.BAD_REQUEST, "404088", "잘못된 토큰 정보입니다.");
 	
 	private HttpStatus httpStatus;
 	private String code;
