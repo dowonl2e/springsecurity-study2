@@ -6,7 +6,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.springframework.boot.configurationprocessor.json.JSONException;
 import org.springframework.boot.configurationprocessor.json.JSONObject;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.web.access.AccessDeniedHandler;
@@ -32,14 +31,11 @@ public class JwtAccessDeniedHandler implements AccessDeniedHandler {
         response.setContentType("application/json;charset=UTF-8");
         response.setStatus(HttpServletResponse.SC_FORBIDDEN);
 
-        JSONObject responseObj = new JSONObject();
-        try {
-        	responseObj.put("status", errorCode.getHttpStatus().value());
-	        responseObj.put("code", errorCode.getCode());
-	        responseObj.put("message", errorCode.getMessage());
-        } catch(JSONException e) {
+        JSONObject responseObj = ErrorResponse.toResponseJson(errorCode);
+        if(responseObj == null) {
         	response.sendError(HttpServletResponse.SC_FORBIDDEN);
         }
+        
         response.getWriter().print(responseObj);
     }
 

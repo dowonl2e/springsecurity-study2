@@ -37,7 +37,6 @@ public class ErrorResponse{
 	}
 	
 	public static JSONObject toResponseJson(ErrorCode errorCode) {
-	
         try {
     		
         	JSONObject jsonObj = new JSONObject();
@@ -49,6 +48,5 @@ public class ErrorResponse{
         } catch(JSONException e) {
         	return null;
         }
-        
 	}
 }
