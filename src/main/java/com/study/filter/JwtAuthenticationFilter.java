@@ -15,7 +15,9 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import com.study.provider.JwtTokenProvider;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
@@ -29,15 +31,23 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 			throws ServletException, IOException {
 		
 		String token = resolveToken(request);
-
-		if (StringUtils.hasText(token) && jwtTokenProvider.validateToken(token)) {
+		String requestURI = request.getRequestURI();
+		
+		if (StringUtils.hasText(token) && jwtTokenProvider.isValidToken(token)) {
 			Authentication authentication = jwtTokenProvider.getAuthentication(token);
 			SecurityContextHolder.getContext().setAuthentication(authentication);
+			log.debug("Security Context에 "+authentication.getName()+" 인증 정보를 저장했습니다, URI : " + requestURI);
+		}
+		else {
+			log.debug("유효한 JWT 토큰이 없습니다, URI : " + requestURI);
 		}
 		
 		filterChain.doFilter(request, response);
 	}
 	
+	/*
+     * HTTP Request 헤더에서 토큰만 추출하기 위한 메서드
+     */
 	private String resolveToken(HttpServletRequest request) {
 		String token = request.getHeader(AUTHORIZATION_HEADER);
 		if(StringUtils.hasText(token) && token.startsWith(BEARER_PREFIX)) {
