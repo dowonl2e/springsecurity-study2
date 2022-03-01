@@ -43,6 +43,7 @@ public enum ErrorCode {
 	INVALID_AUTH_TOKEN(HttpStatus.BAD_REQUEST, "404018", "권한 정보가 없는 토큰입니다."),
 	UNSUPPORTED_AUTH_TOKEN(HttpStatus.BAD_REQUEST, "404058", "지원되지 않는 토큰입니다."),
 	INVALID_REFRESH_TOKEN(HttpStatus.BAD_REQUEST, "404019", "유효하지 않는 리프레시 토큰입니다."),
+	NOT_EXIST_USERINFO_TOKEN(HttpStatus.BAD_REQUEST, "404070", "토큰의 유저 정보가 없습니다."),
 	MISMATCH_REFRESH_TOKEN(HttpStatus.BAD_REQUEST, "404039", "토큰의 유저 정보가 일치하지 않습니다."),
 	EXPIRED_AUTH_TOKEN(HttpStatus.BAD_REQUEST , "404048", "만료된 토큰입니다."),
 	NOT_EXIST_AUTH_TOKEN(HttpStatus.BAD_REQUEST, "404078", "토큰 정보가 없습니다."),
