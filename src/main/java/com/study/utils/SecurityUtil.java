@@ -3,9 +3,9 @@ package com.study.utils;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
-import lombok.extern.slf4j.Slf4j;
+import com.study.exception.CustomException;
+import com.study.status.ErrorCode;
 
-@Slf4j
 public class SecurityUtil {
 	
 	private SecurityUtil() {}
@@ -16,7 +16,7 @@ public class SecurityUtil {
 		final Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		
 		if(authentication == null || authentication.getName() == null) {
-			throw new RuntimeException("Security Context 에 인증 정보가 없습니다.");
+			throw new CustomException(ErrorCode.NOT_EXIST_USERINFO_TOKEN);
 		}
 		
 		return Long.parseLong(authentication.getName());
