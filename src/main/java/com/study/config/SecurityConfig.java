@@ -8,10 +8,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-import com.study.filter.JwtAuthenticationFilter;
-import com.study.member.values.Authority;
 import com.study.provider.JwtTokenProvider;
 import com.study.security.JwtAccessDeniedHandler;
 import com.study.security.JwtAuthenticationEntryPoint;
