@@ -34,9 +34,11 @@ import lombok.extern.slf4j.Slf4j;
 @Component
 public class JwtTokenProvider {
 
-	private static final String AUTHORITIES_KEY = "Auth";
-	private static final String BEARER_TYPE = "Bearer";
+	private static final String AUTHORIZATION = "Authorization";
+	private static final String AUTH_TYPE = "Bearer";
+	
 	private static final long ACCESS_TOKEN_EXPIRE_TIME = 1000 * 60 * 30; // 30분
+	
 	private static final long REFRESH_TOKEN_EXPIRE_TIME = 1000 * 60 * 60 * 24 * 7; //7일
 	
 	private final Key key;
@@ -63,7 +65,7 @@ public class JwtTokenProvider {
 		String accessToken = Jwts.builder()
 				.setSubject(authentication.getName()) 		// payload "sub": "name"
 				.setIssuedAt(now)
-				.claim(AUTHORITIES_KEY, authorities)		// payload "Auth": "ROLE_USER"
+				.claim(AUTHORIZATION, authorities)		// payload "Authrization": "ROLE_USER"
 				.setExpiration(accessTokenExpiresIn)		// payload "exp": 1516239022 (예시)
 				.signWith(key, SignatureAlgorithm.HS512)	// header "alg": "HS512"
 				.compact();
@@ -76,7 +78,7 @@ public class JwtTokenProvider {
 				.compact();
 		
 		return TokenDto.builder()
-				.grantType(BEARER_TYPE)
+				.grantType(AUTH_TYPE)
 				.accessToken(accessToken)
 				.accessTokenExpioresIn(accessTokenExpiresIn.getTime())
 				.refreshToken(refreshToken)
@@ -94,12 +96,12 @@ public class JwtTokenProvider {
 	public Authentication getAuthentication(String accessToken) {
 		Claims claims = parseClaims(accessToken);
 		
-		if(claims.get(AUTHORITIES_KEY) == null) {
+		if(claims.get(AUTHORIZATION) == null) {
 			throw new CustomException(ErrorCode.NOT_EXIST_AUTH_TOKEN);
 		}
 		
 		Collection<? extends GrantedAuthority> authorities = 
-				Arrays.stream(claims.get(AUTHORITIES_KEY).toString().split(","))
+				Arrays.stream(claims.get(AUTHORIZATION).toString().split(","))
 				.map(SimpleGrantedAuthority::new)
 				.collect(Collectors.toList());
 		
@@ -116,7 +118,6 @@ public class JwtTokenProvider {
 	 * @return
 	 */
 	public boolean isValidToken(String token) {
-		
 		try {
 			Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
 			return true;
@@ -131,8 +132,12 @@ public class JwtTokenProvider {
         }
 		return false;
 	}
-	
-	//토큰 복호화
+    
+	/**
+	 * 토큰을 복호화 한다.
+	 * @param accessToken
+	 * @return
+	 */
 	private Claims parseClaims(String accessToken) {
 		try {
 			return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(accessToken).getBody();
@@ -140,4 +145,14 @@ public class JwtTokenProvider {
 			return e.getClaims();
 		}
 	}
+
+    /**
+     * 복호화된 토큰에서 name 추출한다.
+     * @param accessToken
+     * @return
+     */
+    public String getSubject(String accessToken) {
+		return parseClaims(accessToken).getSubject();
+    }
+
 }
