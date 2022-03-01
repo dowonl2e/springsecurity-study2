@@ -5,6 +5,7 @@ import java.util.Optional;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -53,6 +54,9 @@ public class AuthService {
 		Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
 		if(authentication.isAuthenticated() == false)
 			throw new CustomException(ErrorCode.USER_MISMATCH_PWD);    		//인증 정보를 기반으로 Token 생성
+		
+		//인증정보 SecurityContextHolder에 추가
+		SecurityContextHolder.getContext().setAuthentication(authentication);
 		
 		//인증 정보를 기반으로 Token 생성
 		TokenDto tokenDto = jwtTokenProvider.generateTokenDto(authentication);
