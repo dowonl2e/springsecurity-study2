@@ -32,9 +32,17 @@ public class MemberApiController {
 				);
 	}
 	
-	@GetMapping("/members/{email}")
-	public ResponseEntity<BasicResponse<MemberResponseDto>> getMember(@PathVariable final String email){
-		Optional<MemberResponseDto> responseDto = Optional.ofNullable(memberService.getMember(email));
+//	@GetMapping("/members/{email}")
+//	public ResponseEntity<BasicResponse<MemberResponseDto>> getMember(@PathVariable final String email){
+//		Optional<MemberResponseDto> responseDto = Optional.ofNullable(memberService.getMember(email));
+//		return ResponseEntity.ok().body(
+//				new BasicResponse<MemberResponseDto>(ResponseCode.USER_FIND_SUCCESS, responseDto.get())
+//			);
+//	}
+	
+	@GetMapping("/members/{idx}")
+	public ResponseEntity<BasicResponse<MemberResponseDto>> getMember(@PathVariable final long idx){
+		Optional<MemberResponseDto> responseDto = Optional.ofNullable(memberService.getMember(idx));
 		return ResponseEntity.ok().body(
 				new BasicResponse<MemberResponseDto>(ResponseCode.USER_FIND_SUCCESS, responseDto.get())
 			);
