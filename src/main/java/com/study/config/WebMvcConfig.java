@@ -5,26 +5,28 @@ import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import com.study.interceptor.AuthInterceptor;
+import com.study.interceptor.LoggerInterceptor;
 
-import lombok.extern.slf4j.Slf4j;
+import lombok.AllArgsConstructor;
 
-@Slf4j
 @Configuration
 public class WebMvcConfig implements WebMvcConfigurer {
 	
 	private final AuthInterceptor authInterceptor;
-
-	public WebMvcConfig(AuthInterceptor authInterceptor) {
+	private final LoggerInterceptor loggerInterceptor;
+	
+	public WebMvcConfig(AuthInterceptor authInterceptor, LoggerInterceptor loggerInterceptor){
 		this.authInterceptor = authInterceptor;
+		this.loggerInterceptor = loggerInterceptor;
 	}
-
+	
 	@Override
 	public void addInterceptors(InterceptorRegistry registry) {
-		log.debug(">>> WebMvcConfig addInterceptor");
+		registry.addInterceptor(loggerInterceptor)
+			.excludePathPatterns("/css/**", "/fonts/**", "/plugin/**", "/scripts/**", "/favicon**");
 		registry.addInterceptor(authInterceptor)
 			.addPathPatterns("/**")
-			.excludePathPatterns("/api/auth/**")
-			.excludePathPatterns("/static");
+			.excludePathPatterns("/api/auth/**", "/static");
 		WebMvcConfigurer.super.addInterceptors(registry);
 	}
 	
